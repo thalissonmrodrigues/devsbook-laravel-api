@@ -22,7 +22,7 @@ Route::get('/ping', function () {
     return ['ping' => true];
 });
 
-Route::post('/401', [AuthController::class, 'unauthorized'])->name('unauthorized');
+Route::get('/401', [AuthController::class, 'unauthorized'])->name('unauthorized');
 
 Route::post('/auth/login', [AuthController::class, 'login'])->name('login');
 Route::post('/user', [UserController::class, 'create'])->name('user.create');
