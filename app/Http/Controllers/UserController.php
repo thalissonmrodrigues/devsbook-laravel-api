@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserRelation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -189,7 +190,23 @@ class UserController extends Controller
     /**
      * Listing users.
      */
-    public function read() {
+    public function read($id = null) {
+        $array = ['messages' => ''];
+        $user = User::find($id) ?? $this->loggedUser;
+        $dateFrom = new \DateTime($user->birthdate);
+        $dateTo = new \DateTime('today');
 
+        $user['avatar'] = url('media/avatars/' . $user->avatar);
+        $user['cover'] = url('media/covers/' . $user->cover);
+        $user['me'] = ($user->id === $this->loggedUser->id) ? true : false;
+        $user['years'] = $dateFrom->diff($dateTo)->y;
+        $user['following'] = $user->following()->count();
+        $user['followers'] = $user->followers()->count();
+        $user['photos'] = $user->posts()->where('type', 'photo')->count();
+        $user['is_following'] = (bool) UserRelation::where('user_from', $this->loggedUser->id)
+            ->where('user_to', $id)->count();
+
+        $array['data'] = $user;
+        return $array;
     }
 }

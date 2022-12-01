@@ -40,8 +40,13 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(PostLike::class, 'id_user');
     }
 
-    public function relations()
+    public function following()
     {
         return $this->hasMany(UserRelation::class, 'user_from');
+    }
+
+    public function followers()
+    {
+        return $this->hasMany(UserRelation::class, 'user_to');
     }
 }
