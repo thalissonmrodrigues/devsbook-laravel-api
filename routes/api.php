@@ -45,7 +45,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/feed', [FeedController::class, 'create'])->name('feed.create');
 
     Route::post('/post/{id}/like', [PostController::class, 'like'])->name('post.like');
-    Route::post('/post/{id}/comment', [PostController::class, 'commemt'])->name('post.comment');
+    Route::post('/post/{id}/comment', [PostController::class, 'comment'])->name('post.comment');
 
     Route::get('/search', [SearchController::class, 'search'])->name('search');
 });
