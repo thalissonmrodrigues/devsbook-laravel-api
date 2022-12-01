@@ -46,7 +46,6 @@ class CreateAllTables extends Migration
             $table->id();
             $table->foreignId('id_post')->constrained('posts')->onDelete('cascade');
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
-            $table->text('body');
             $table->timestamps();
         });
 
@@ -54,6 +53,7 @@ class CreateAllTables extends Migration
             $table->id();
             $table->foreignId('id_post')->constrained('posts')->onDelete('cascade');
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
+            $table->text('body');
             $table->timestamps();
         });
     }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -28,21 +27,21 @@ class User extends Authenticatable implements JWTSubject
 
     public function posts()
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class, 'id_user');
     }
 
     public function comments()
     {
-        return $this->hasMany(PostComment::class);
+        return $this->hasMany(PostComment::class, 'id_user');
     }
 
     public function likes()
     {
-        return $this->hasMany(PostLike::class);
+        return $this->hasMany(PostLike::class, 'id_user');
     }
 
     public function relations()
     {
-        return $this->hasMany(Relation::class);
+        return $this->hasMany(UserRelation::class, 'user_from');
     }
 }

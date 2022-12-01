@@ -11,11 +11,11 @@ class UserRelation extends Model
 
     public function from()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_from', 'id');
     }
 
     public function to()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_to', 'id');
     }
 }
