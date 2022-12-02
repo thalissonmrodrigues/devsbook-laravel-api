@@ -85,6 +85,34 @@ class FeedController extends Controller
     }
 
     /**
+     * Get user photos.
+     */
+    public function userPhotos(Request $request, $id = null) {
+        $array = ['messages' => ''];
+        $page = intval($request->get('page'));
+        $perPage = 2;
+
+        $user = User::find($id) ?? $this->loggedUser;
+        $photoList = Post::where('id_user', $user->id)
+            ->where('type', 'photo')
+            ->orderBy('created_at', 'desc')
+            ->offset($page * $perPage)
+            ->limit($perPage)
+            ->get();
+
+        $photos = $this->postListToObject($photoList, $this->loggedUser->id);
+
+        $total = Post::where('id_user', $user->id)->where('type', 'photo')->count();
+        $pageCount = ceil($total / $perPage);
+
+        $array['photos'] = $photos;
+        $array['pageCount'] = $pageCount;
+        $array['currentPage'] = $page;
+
+        return $array;
+    }
+
+    /**
      * Create Posts.
      */
     public function create(Request $request) {
@@ -154,6 +182,10 @@ class FeedController extends Controller
             }
             else {
                 $postList[$key]['mine'] = false;
+            }
+
+            if($post->type === "photo") {
+                $post['body'] = url('media/uploads/' . $post->body);
             }
 
             // Fill in the user information.

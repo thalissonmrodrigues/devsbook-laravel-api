@@ -209,4 +209,95 @@ class UserController extends Controller
         $array['data'] = $user;
         return $array;
     }
+
+    /**
+     * Follow and unfollow.
+     */
+    public function follow($id) {
+        $array = ['messages' => ''];
+
+        if ($id == $this->loggedUser->id) {
+            $array['messages'] = "You can't follow yourself.";
+            return $array;
+        }
+
+        $user = User::find($id);
+        if($user) {
+            $relations = UserRelation::where('user_from', $this->loggedUser->id)->where('user_to', $user->id)->first();
+            if (isset($relations)) {
+                UserRelation::destroy($relations->id);
+                $array['follow'] = false;
+                $array['messages'] = 'You unfollowed.';
+            }
+            else {
+                $newRelation = new UserRelation();
+                $newRelation->user_from = $this->loggedUser->id;
+                $newRelation->user_to = $id;
+                $newRelation->save();
+                $array['follow'] = true;
+                $array['messages'] = 'You started following';
+            }
+        }
+        else {
+            $array['messages'] = "User not found.";
+            return $array;
+        }
+
+        return $array;
+    }
+
+    /**
+     * Get followers.
+     */
+    public function followers($id) {
+        $array = ['messages' => ''];
+
+        $user = User::find($id);
+        if($user) {
+            $followers = $user->followers;
+            $array['followers'] = [];
+
+            foreach ($followers as $relation) {
+                $array['followers'][] = [
+                    'id' => $relation->from->id,
+                    'name' => $relation->from->name,
+                    'avatar' => url('media/avatars/' . $relation->from->avatar),
+                ];
+            }
+        }
+        else {
+            $array['messages'] = "User not found.";
+            return $array;
+        }
+
+        return $array;
+    }
+
+    /**
+     * Get following.
+     */
+    public function following($id) {
+        $array = ['messages' => ''];
+
+        $user = User::find($id);
+        if($user) {
+            $following = $user->following;
+            $array['following'] = [];
+
+            foreach ($following as $relation) {
+                $array['following'][] = [
+                    'id' => $relation->to->id,
+                    'name' => $relation->to->name,
+                    'avatar' => url('media/avatars/' . $relation->from->avatar),
+                ];
+            }
+
+        }
+        else {
+            $array['messages'] = "User not found.";
+            return $array;
+        }
+
+        return $array;
+    }
 }
