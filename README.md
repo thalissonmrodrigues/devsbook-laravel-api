@@ -1,7 +1,7 @@
 # Devsbook API
 Projeto em Laravel fazendo uma api de rede social onde é possivel criar postagem, seguir outros usuários, ver feeds entre outras coisas.
 
-Projeto desenvolvido durante o curso [B7web](https://b7web.com.br).
+Projeto desenvolvido durante o curso [B7web](https://b7web.com.br) apenas para estudo.
 
 ## Instalação
 <hr>
