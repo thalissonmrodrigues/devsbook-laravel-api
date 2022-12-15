@@ -61,6 +61,12 @@ class UserController extends Controller
             return $array;
         }
 
+        $user = Auth::user();
+        $array['id'] = $user->id;
+        $array['name'] = $user->name;
+        $array['email'] = $user->email;
+        $array['avatar'] = url('media/avatars/' . $user->avatar);
+        $array['cover'] = url('media/covers/' . $user->cover);
         $array['token'] = $token;
         $array['messages'] = 'Success!';
 
